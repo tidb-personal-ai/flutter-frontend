@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "801432512124",
+    "firebase_url": "https://tidb-personal-ai-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tidb-personal-ai",
+    "storage_bucket": "tidb-personal-ai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801432512124:android:0c903fe30090eea382cbf9",
+        "android_client_info": {
+          "package_name": "com.example.personal_ai"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801432512124-8fsb5bjk5uieduft6f3ti5pv292hpi5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgQ_2LIYuBZFkhx7Qn50OAykKbSRH-guc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801432512124-8fsb5bjk5uieduft6f3ti5pv292hpi5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
