@@ -17,7 +17,7 @@ FirebaseUIAuth.configureProviders([
     emailLinkProviderConfig,
     GoogleProvider(
       clientId: '801432512124-8fsb5bjk5uieduft6f3ti5pv292hpi5v.apps.googleusercontent.com',
-      redirectUri: 'http://localhost:52614/#/__/auth/handler' 
+      redirectUri: 'http://localhost:52614/#/__/auth/handler'
     ),
  ]);
  runApp(const AuthGatedApp());

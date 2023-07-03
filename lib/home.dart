@@ -1,4 +1,44 @@
+import 'dart:convert';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+Future<HelloMessage> fetchHelloMessge() async {
+    // Fetch the currentUser, and then get its id token 
+  final user = FirebaseAuth.instance.currentUser!;
+  final idToken = await user.getIdToken();
+
+  // Create authorization header
+  final header = { "authorization": 'Bearer $idToken' };
+  
+  final response = await http
+      .get(Uri.parse('http://localhost:3000'), headers: header);
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+    return HelloMessage.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load hello message');
+  }
+}
+
+class HelloMessage {
+  final String message;
+
+  const HelloMessage({
+    required this.message,
+  });
+
+  factory HelloMessage.fromJson(Map<String, dynamic> json) {
+    return HelloMessage(
+      message: json['message'],
+    );
+  }
+}
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -20,6 +60,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  late Future<HelloMessage> futureMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    futureMessage = fetchHelloMessge();
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -69,6 +116,19 @@ class _MyHomePageState extends State<MyHomePage> {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            FutureBuilder<HelloMessage>(
+              future: futureMessage,
+              builder: ((context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(snapshot.data!.message);
+                } else if (snapshot.hasError) {
+                  return Text('${snapshot.error}');
+                }
+
+                // By default, show a loading spinner.
+                return const CircularProgressIndicator();
+              })
+            ),
             const Text(
               'You have pushed the button this many times:',
             ),

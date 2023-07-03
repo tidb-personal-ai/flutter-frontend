@@ -1,6 +1,5 @@
 
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 
@@ -136,6 +135,7 @@ class AuthGatedApp extends StatelessWidget {
         },
         '/verify-email': (context) {
           return EmailVerificationScreen(
+            actionCodeSettings: actionCodeSettings,
             headerBuilder: (context, constraints, shrinkOffset) {
              return Padding(
                padding: const EdgeInsets.all(20),
