@@ -1,8 +1,11 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+const baseUrl = kReleaseMode ? 'https://tidb-personal-ai.web.app/api/' : 'http://localhost:3000/api/';
 
 Future<HelloMessage> fetchHelloMessge() async {
     // Fetch the currentUser, and then get its id token 
@@ -13,7 +16,7 @@ Future<HelloMessage> fetchHelloMessge() async {
   final header = { "authorization": 'Bearer $idToken' };
   
   final response = await http
-      .get(Uri.parse('http://localhost:3000'), headers: header);
+      .get(Uri.parse(baseUrl), headers: header);
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
