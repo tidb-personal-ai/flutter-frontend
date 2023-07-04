@@ -6,7 +6,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
+    "rewrites": [      
+      {
+        "source": "/api/**",
+        "run": {
+          "serviceId": "backend"
+        }
+      },
       {
         "source": "**",
         "destination": "/index.html"
