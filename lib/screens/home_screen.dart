@@ -1,13 +1,15 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-const baseUrl = kReleaseMode ? 'https://tidb-personal-ai.web.app/api/' : 'http://localhost:3000/api/';
+import 'package:personal_ai/config/config.dart';
+
 
 Future<HelloMessage> fetchHelloMessge() async {
+  final baseUrl = Config.currentPlatform.backendUrl;
+
     // Fetch the currentUser, and then get its id token 
   final user = FirebaseAuth.instance.currentUser!;
   final idToken = await user.getIdToken();
@@ -36,9 +38,9 @@ class HelloMessage {
     required this.message,
   });
 
-  factory HelloMessage.fromJson(Map<String, dynamic> json) {
+  factory HelloMessage.fromJson(dynamic json) {
     return HelloMessage(
-      message: json['message'],
+      message: json['message'] as String,
     );
   }
 }
