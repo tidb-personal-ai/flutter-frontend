@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:personal_ai/providers/auth_provider.dart';
+import 'package:personal_ai/screens/ai_gate_screen.dart';
 import 'package:personal_ai/screens/auth_screens.dart';
-import 'package:personal_ai/screens/home_screen.dart';
+import 'package:personal_ai/screens/profile_screen.dart';
 
 class PersonalAiApp extends ConsumerWidget {
   const PersonalAiApp({super.key});
@@ -32,8 +33,9 @@ class PersonalAiApp extends ConsumerWidget {
         ),
         initialRoute: initialRoute,
         routes: {
-        '/': (context) => const MyHomePage(title: 'Personal AI'),
+        '/': (context) => const AiGateScreen(),
         '/login':(context) => const LoginScreen(),
+        '/profile': (context) => const ProfileScreen(),
         '/verify-email': (context) => const VerifyEmailScreen(),
         '/forgot-password':(context) => const PasswordResetScreen(),
         },
