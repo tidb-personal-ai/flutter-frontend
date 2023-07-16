@@ -29,8 +29,11 @@ class BackendRestService {
     return header;
   }
   
-  Future<String> get(String method) async {
-    final response = await http.get(Uri.parse(baseUrl + method), headers: await _getHeaders());
+  Future<String> get(String method, [Map<String, dynamic>? queryParameters]) async {
+    final uri = queryParameters != null 
+      ? Uri.parse(baseUrl + method).replace(queryParameters: queryParameters)
+      : Uri.parse(baseUrl + method);
+    final response = await http.get(uri, headers: await _getHeaders());
 
     if (response.ok) {
       return response.body;
