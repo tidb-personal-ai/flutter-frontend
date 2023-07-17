@@ -6,7 +6,7 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$initialRouteHash() => r'041742462d2bc61e75d5c63874a3c18bfd447e8f';
+String _$initialRouteHash() => r'b0b6cb22546626c5f9288c8daf1af826d57ce506';
 
 /// See also [initialRoute].
 @ProviderFor(initialRoute)

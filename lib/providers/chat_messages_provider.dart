@@ -18,19 +18,36 @@ String randomString() {
 }
 
 @riverpod
-Future<List<Message>> chatMessages(ChatMessagesRef ref) async {
-  final ai = (await ref.watch(aiProviderProvider.future))!;
-  final user = ref.watch(chatUserProvider);
-  final modelMessages = await ref.watch(modelMessagesProvider.future);
-  final aiUser = User(id: ai.name, firstName: ai.name);
+class ChatMessages extends _$ChatMessages {
+  @override
+  Future<List<Message>> build() async {
+    print('Building chat messages view models.');
+    final ai = (await ref.watch(aiProviderProvider.future))!;
+    final user = ref.watch(chatUserProvider);
+    final modelMessages = await ref.watch(modelMessagesProvider.future);
+    final aiUser = User(id: ai.name, firstName: ai.name);
+    final messages = modelMessages.map((m) => TextMessage(
+        id: m.id.toString(), 
+        text: m.message, 
+        author: m.sender == ChatMessageSender.user 
+        ? user 
+        : aiUser,
+        createdAt: m.timestamp.millisecondsSinceEpoch,
+      ),
+    ).toList();
+    messages.sort((a, b) => b.id.compareTo(a.id));
 
-  return modelMessages.map((m) => TextMessage(
-      id: m.id.toString(), 
-      text: m.message, 
-      author: m.sender == ChatMessageSender.user 
-      ? user 
-      : aiUser,
-      createdAt: m.timestamp.millisecondsSinceEpoch,
-    ),
-  ).toList();
+    return messages;
+  }
+
+  void sendMessage(String message) {
+    final messageSender = ref.read(modelMessagesProvider.notifier);
+    messageSender.sendMessage(ChatMessage(
+        id: 0, 
+        message: message, 
+        timestamp: DateTime.now(), 
+        sender: ChatMessageSender.user,
+      ),
+    );
+  }
 }

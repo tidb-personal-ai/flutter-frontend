@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +19,20 @@ class BackendRestService {
 
   Future<Map<String, String>> _getHeaders() async {    
     // Fetch the currentUser, and then get its id token 
-    final user = FirebaseAuth.instance.currentUser!;
+    late final StreamSubscription<User?> subscription;
+    late final User user;
+    try {
+      final waitForUser = Completer<User>();
+      subscription = FirebaseAuth.instance.authStateChanges().listen((user) {
+        if (user != null) {
+          waitForUser.complete(user);
+        }
+      });
+      user = FirebaseAuth.instance.currentUser ?? await waitForUser.future;
+    }
+    finally {
+      subscription.cancel();
+    }
     final idToken = await user.getIdToken();
 
     // Create authorization header

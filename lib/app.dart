@@ -33,11 +33,11 @@ class PersonalAiApp extends ConsumerWidget {
         ),
         initialRoute: initialRoute,
         routes: {
-        '/': (context) => const AiGateScreen(),
-        '/login':(context) => const LoginScreen(),
-        '/profile': (context) => const ProfileScreen(),
-        '/verify-email': (context) => const VerifyEmailScreen(),
-        '/forgot-password':(context) => const PasswordResetScreen(),
+        'chat': (context) => const AiGateScreen(),
+        'login':(context) => const LoginScreen(),
+        'profile': (context) => const ProfileScreen(),
+        'verify-email': (context) => const VerifyEmailScreen(),
+        'forgot-password':(context) => const PasswordResetScreen(),
         },
       );
   }

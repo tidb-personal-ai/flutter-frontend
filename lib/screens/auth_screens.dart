@@ -20,33 +20,33 @@ class LoginScreen extends StatelessWidget {
         ForgotPasswordAction((context, email) {
           Navigator.pushNamed(
             context,
-            '/forgot-password',
+            'forgot-password',
             arguments: {'email': email},
           );
         }),
         AuthStateChangeAction<SignedIn>((context, state) {
           if (!state.user!.emailVerified) {
-            Navigator.pushNamed(context, '/verify-email');
+            Navigator.pushNamed(context, 'verify-email');
           } else {
-            Navigator.pushReplacementNamed(context, '/');
+            Navigator.pushReplacementNamed(context, 'chat');
           }
         }),
         AuthStateChangeAction<UserCreated>((context, state) {
           if (!state.credential.user!.emailVerified) {
-            Navigator.pushNamed(context, '/verify-email');
+            Navigator.pushNamed(context, 'verify-email');
           } else {
-            Navigator.pushReplacementNamed(context, '/');
+            Navigator.pushReplacementNamed(context, 'chat');
           }
         }),
         AuthStateChangeAction<CredentialLinked>((context, state) {
           if (!state.user.emailVerified) {
-            Navigator.pushNamed(context, '/verify-email');
+            Navigator.pushNamed(context, 'verify-email');
           } else {
             Navigator.pushReplacementNamed(context, '/profile');
           }
         }),
         EmailLinkSignInAction((context) {
-          Navigator.pushReplacementNamed(context, '/email-link-sign-in');
+          Navigator.pushReplacementNamed(context, 'email-link-sign-in');
         }),
       ],
       styles: const {
@@ -119,11 +119,11 @@ class VerifyEmailScreen extends StatelessWidget {
       },
       actions: [
         EmailVerifiedAction(() {
-          Navigator.pushReplacementNamed(context, '/');
+          Navigator.pushReplacementNamed(context, 'chat');
         }),
         AuthCancelledAction((context) {
           FirebaseUIAuth.signOut(context: context);
-          Navigator.pushReplacementNamed(context, '/login');
+          Navigator.pushReplacementNamed(context, 'login');
         }),
       ],
     );

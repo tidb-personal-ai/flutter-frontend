@@ -8,12 +8,12 @@ String initialRoute(InitialRouteRef ref) {
   final auth = FirebaseAuth.instance;
 
   if (auth.currentUser == null) {
-    return '/login';
+    return 'login';
   }
 
   if (!auth.currentUser!.emailVerified && auth.currentUser!.email != null) {
-    return '/verify-email';
+    return 'verify-email';
   }
 
-  return '/';
+  return 'chat';
 }

@@ -26,19 +26,29 @@ class ChatMessage {
   }
 
   /// This method is used to convert a map to a ChatMessage object
-  factory ChatMessage.fromApi(Map<String, dynamic> map) {
+  factory ChatMessage.fromApi(Map<String, dynamic> map, {ChatMessageSender? sender}) {
     return ChatMessage(
       id: map['id'] as int,
       message: map['message'] as String,
       timestamp: DateTime.parse(map['timestamp'] as String),
-      sender: map['sender'] == 'user'
+      sender: sender ?? (map['sender'] == 'user'
           ? ChatMessageSender.user
-          : ChatMessageSender.ai,
+          : ChatMessageSender.ai),
     );
   }
 
   /// This method is used to convert a ChatMessage object to a map
   Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'message': message,
+      'timestamp': timestamp,
+      'sender': sender.name,
+    };
+  }
+
+  /// This method is used to convert a ChatMessage object to a map
+  Map<String, dynamic> toApi() {
     return {
       'id': id,
       'message': message,
