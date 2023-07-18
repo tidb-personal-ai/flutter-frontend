@@ -10,26 +10,18 @@ class ChatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(chatUserProvider);
-    final messages = ref.watch(chatMessagesProvider);
-
-    return messages.when(
-      data: (messages) => Chat(
-            messages: messages,
-            onSendPressed: (p0) {
-              ref.read(chatMessagesProvider.notifier).sendMessage(p0.text);
-            },
-            user: user,
-            avatarBuilder: (userId) => RandomAvatar(userId, width: 48),
-            showUserAvatars: true,
-            showUserNames: true,
-      ), 
-      error: (error, stack) => Center(
-        child: Text('Error $error'),
-      ),
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
+    return ref.watch(isLoadingProvider) 
+      ? const Center(child: CircularProgressIndicator())
+      : Chat(
+        messages: ref.watch(chatMessagesProvider),
+        onSendPressed: (p0) {
+          ref.read(chatMessagesProvider.notifier).sendMessage(p0.text);
+        },
+        user: ref.watch(chatUserProvider)!,
+        avatarBuilder: (userId) => RandomAvatar(userId, width: 48),
+        showUserAvatars: true,
+        showUserNames: true,
+        typingIndicatorOptions: TypingIndicatorOptions(typingUsers: ref.watch(typingUsersProvider)),
+      );
   }
 }

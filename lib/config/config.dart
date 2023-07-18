@@ -38,7 +38,7 @@ class Config {
 
   static const Config kDebugAndroidConfig = Config(
     backendUrl: 'http://10.0.2.2:3000/api/',
-    socketUrl: 'http://localhost:3000',
+    socketUrl: 'http://10.0.2.2:3000',
   );
 }
 

@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
       avatar: RandomAvatar(user.uid, trBackground: true),
       actions: [
         firebase_ui.SignedOutAction((context) {
-          Navigator.pushReplacementNamed(context, '/login');
+          Navigator.pushReplacementNamed(context, 'login');
         }),
       ],
     );

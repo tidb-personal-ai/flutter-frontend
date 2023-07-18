@@ -1,15 +1,15 @@
 import 'package:idb_sqflite/idb_sqflite.dart';
 import 'package:personal_ai/models/chat_message.dart';
-import 'package:personal_ai/providers/database_provider.dart';
 
 class LocalDatabaseService {
   final Database _database;
+  final String _storeName;
 
-  LocalDatabaseService(this._database);
+  LocalDatabaseService(this._database, this._storeName);
 
   Future<List<ChatMessage>> fetchMessages() async {
-    final txn = _database.transaction(storeName, idbModeReadOnly);
-    final store = txn.objectStore(storeName);
+    final txn = _database.transaction(_storeName, idbModeReadOnly);
+    final store = txn.objectStore(_storeName);
     final value = await store.getAll();
     await txn.completed;
     final messages = value.map((e) => ChatMessage.fromMap(e as Map)).toList();
@@ -17,8 +17,8 @@ class LocalDatabaseService {
   }
 
   Future<void> upsertMessage(ChatMessage message) async {
-    final txn = _database.transaction(storeName, idbModeReadWrite);
-    final store = txn.objectStore(storeName);
+    final txn = _database.transaction(_storeName, idbModeReadWrite);
+    final store = txn.objectStore(_storeName);
     await store.put(message.toMap(), message.id);
     await txn.completed;
   }

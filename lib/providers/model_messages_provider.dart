@@ -1,4 +1,5 @@
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
@@ -17,48 +18,43 @@ class ModelMessages extends _$ModelMessages {
 
   FutureOr<List<ChatMessage>> _fetchMessages() async {
     final database = await ref.read(localDatabaseProvider.future);
-    return await database.fetchMessages();
+    return await database!.fetchMessages();
   }
 
   Future<void> _synchronizeWithBackend() async {
-    state = await AsyncValue.guard(() async {
-      print('Synchronizing with backend');
-      final messageList = await future;
+    print('Synchronizing with backend');
+    final messageList = await future;
 
-      print('Got message list for backend synchronization.');
-      final queryParameters = <String, dynamic>{};
-      if (messageList.isNotEmpty) {
-        queryParameters['fromId'] = (messageList.map((e) => e.id).reduce(max) + 1).toString();
-      } else {
-        queryParameters['fromId'] = 0.toString();
-      }
-      final backendService = ref.read(backendRestServiceProvider);
-      final messages = await backendService.get('chat', queryParameters);
+    print('Got message list for backend synchronization.');
+    final queryParameters = <String, dynamic>{};
+    if (messageList.isNotEmpty) {
+      queryParameters['fromId'] = (messageList.map((e) => e.id).reduce(max) + 1).toString();
+    } else {
+      queryParameters['fromId'] = 0.toString();
+    }
+    final backendService = ref.read(backendRestServiceProvider);
+    final messages = await backendService.get('chat', queryParameters);
 
-      final jsonObject = jsonDecode(messages)['messages'] as List<dynamic>;
-      final missingMessages = jsonObject.map((e) => ChatMessage.fromApi(e as Map<String, dynamic>)).toList();
-      messageList.addAll(missingMessages);
+    final jsonObject = jsonDecode(messages)['messages'] as List<dynamic>;
+    final missingMessages = jsonObject.map((e) => ChatMessage.fromApi(e as Map<String, dynamic>)).toList();
 
-      final database = await ref.read(localDatabaseProvider.future);
-      database.upsertMessages(missingMessages);
-      return messageList;
-    });
+    final database = await ref.read(localDatabaseProvider.future);
+    await database!.upsertMessages(missingMessages);
+    
+    ref.invalidateSelf();
   }
   
-  Future<void> _startMessageSocketClient() async {
-    final liveChats = ref.watch(socketChatMessageStreamProvider);
-    liveChats.whenData((chatMessage) async {
+  Future<void> _startMessageSocketClient() async {    
+    final socketService = await ref.watch(chatSocketServiceProvider.future);
+    print('Socket stream opened');
+    await for (final message in socketService.stream) {
       print('Received message from socket.');
-      await update((messageList) async {
-        messageList.add(chatMessage);
-
-        final database = await ref.read(localDatabaseProvider.future);
-        database.upsertMessage(chatMessage);
-
-        return messageList;
-      });
-      },
-    );
+      final database = await ref.read(localDatabaseProvider.future);
+      await database!.upsertMessage(message);
+      ref.invalidateSelf();
+      print('Wait for next message.');
+    }
+    print('BROKE INFINITE LOOP!!!!!');
   }
 
   @override
@@ -74,16 +70,18 @@ class ModelMessages extends _$ModelMessages {
   }
 
   Future<void> sendMessage(ChatMessage message) async {
-    await update((messageList) async {
-      print('Sending message to socket.');
-      final socketService = await ref.read(chatSocketServiceProvider.future);
-      final database = await ref.read(localDatabaseProvider.future);
-      final acknowledged = await socketService.sendMessage(message);
-      messageList.add(acknowledged);
+    print('Sending message to socket.');
+    final socketService = await ref.read(chatSocketServiceProvider.future);
+    final database = await ref.read(localDatabaseProvider.future);
+    final acknowledged = await socketService.sendMessage(message);
 
-      database.upsertMessage(acknowledged);
-
-      return messageList;
-    });
+    await database!.upsertMessage(acknowledged);
+    ref.invalidateSelf();
+  }
+  
+  Future<void> onMessageReceived(ChatMessage chatMessage) async {    
+    final database = await ref.read(localDatabaseProvider.future);
+    await database!.upsertMessage(chatMessage);
+    ref.invalidateSelf();
   }
 }

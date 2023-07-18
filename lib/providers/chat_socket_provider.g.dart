@@ -6,22 +6,6 @@ part of 'chat_socket_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$socketChatMessageStreamHash() =>
-    r'695ef5f64c7e840ee5e5760a1559f20e9c361545';
-
-/// See also [socketChatMessageStream].
-@ProviderFor(socketChatMessageStream)
-final socketChatMessageStreamProvider = StreamProvider<ChatMessage>.internal(
-  socketChatMessageStream,
-  name: r'socketChatMessageStreamProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$socketChatMessageStreamHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
-
-typedef SocketChatMessageStreamRef = StreamProviderRef<ChatMessage>;
 String _$chatSocketServiceHash() => r'87432709ab06347dd2a79ed66cf3295cf8f18636';
 
 /// See also [chatSocketService].
