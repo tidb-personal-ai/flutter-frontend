@@ -98,7 +98,6 @@ class VerifyEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return EmailVerificationScreen(
-      actionCodeSettings: actionCodeSettings,
       headerBuilder: (context, constraints, shrinkOffset) {
         return Padding(
           padding: const EdgeInsets.all(20),
