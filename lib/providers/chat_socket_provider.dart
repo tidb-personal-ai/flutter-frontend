@@ -17,8 +17,8 @@ Future<ChatSocketService> chatSocketService(ChatSocketServiceRef ref) async {
   
   final socket = io.io(Config.currentPlatform.socketUrl,
     io.OptionBuilder()
-        .setTransports(['polling'])
-        .setQuery({'Authorization': 'Bearer $idToken'})
+        .setTransports(['websocket'])
+        .setAuth({'Authorization': 'Bearer $idToken'})
         .build(),
   );
 

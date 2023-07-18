@@ -42,7 +42,7 @@ class ChatMessages extends _$ChatMessages {
         createdAt: m.timestamp.millisecondsSinceEpoch,
       ),
     ).toList();
-    messages.sort((a, b) => b.id.compareTo(a.id));
+    messages.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
     return messages;
   }
