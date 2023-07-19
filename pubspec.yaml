@@ -54,6 +54,7 @@ dependencies:
   sqflite: ^2.2.8+4
   idb_shim: ^2.3.1
   socket_io_client: ^2.0.2
+  shared_preferences: ^2.2.0
 
 dev_dependencies:
   flutter_test:
