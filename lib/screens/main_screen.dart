@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
-import 'package:personal_ai/providers/ai_provider.dart';
-import 'package:personal_ai/screens/chat_screen.dart';
-import 'package:personal_ai/screens/profile_screen.dart';
+import 'package:lumios/providers/ai_provider.dart';
+import 'package:lumios/screens/chat_screen.dart';
+import 'package:lumios/screens/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.ai});

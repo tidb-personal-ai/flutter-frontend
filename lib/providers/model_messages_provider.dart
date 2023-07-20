@@ -3,10 +3,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:personal_ai/models/chat_message.dart';
-import 'package:personal_ai/providers/chat_socket_provider.dart';
-import 'package:personal_ai/services/chat_socket_service.dart';
-import 'package:personal_ai/services/local_database_service.dart';
+import 'package:lumios/models/chat_message.dart';
+import 'package:lumios/providers/chat_socket_provider.dart';
+import 'package:lumios/services/chat_socket_service.dart';
+import 'package:lumios/services/local_database_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'backend_rest_provider.dart';

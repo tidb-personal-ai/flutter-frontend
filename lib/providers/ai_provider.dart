@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:personal_ai/providers/backend_rest_provider.dart';
+import 'package:lumios/providers/backend_rest_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

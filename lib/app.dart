@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_ai/providers/auth_provider.dart';
-import 'package:personal_ai/screens/ai_gate_screen.dart';
-import 'package:personal_ai/screens/auth_screens.dart';
-import 'package:personal_ai/screens/profile_screen.dart';
+import 'package:lumios/providers/auth_provider.dart';
+import 'package:lumios/screens/ai_gate_screen.dart';
+import 'package:lumios/screens/auth_screens.dart';
+import 'package:lumios/screens/profile_screen.dart';
 
 class PersonalAiApp extends ConsumerWidget {
   const PersonalAiApp({super.key});
@@ -19,7 +19,7 @@ class PersonalAiApp extends ConsumerWidget {
     final String initialRoute = ref.watch(initialRouteProvider);
 
     return MaterialApp(
-        title: 'Luni',
+        title: 'LumiOS',
         theme: ThemeData(
           useMaterial3: true,
           brightness: Brightness.light,

@@ -1,9 +1,9 @@
 
 import 'dart:async';
 
-import 'package:personal_ai/config/config.dart';
-import 'package:personal_ai/providers/user_provider.dart';
-import 'package:personal_ai/services/chat_socket_service.dart';
+import 'package:lumios/config/config.dart';
+import 'package:lumios/providers/user_provider.dart';
+import 'package:lumios/services/chat_socket_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 

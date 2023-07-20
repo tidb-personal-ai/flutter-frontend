@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_ai/providers/ai_provider.dart';
-import 'package:personal_ai/screens/create_ai_screen.dart';
-import 'package:personal_ai/screens/main_screen.dart';
+import 'package:lumios/providers/ai_provider.dart';
+import 'package:lumios/screens/create_ai_screen.dart';
+import 'package:lumios/screens/main_screen.dart';
 
 class AiGateScreen extends ConsumerWidget {
   const AiGateScreen({super.key});

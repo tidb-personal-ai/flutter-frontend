@@ -1,6 +1,6 @@
 import 'package:flutter_chat_types/flutter_chat_types.dart';
-import 'package:personal_ai/models/chat_message.dart';
-import 'package:personal_ai/providers/ai_user_provider.dart';
+import 'package:lumios/models/chat_message.dart';
+import 'package:lumios/providers/ai_user_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'model_messages_provider.dart';

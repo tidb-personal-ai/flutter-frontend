@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_ai/providers/ai_provider.dart';
+import 'package:lumios/providers/ai_provider.dart';
 
 class CreateAiScreen extends ConsumerStatefulWidget {
   const CreateAiScreen({super.key, required this.aiProvider});

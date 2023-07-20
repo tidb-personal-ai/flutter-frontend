@@ -5,9 +5,9 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_ai/app.dart';
+import 'package:lumios/app.dart';
 
-import 'package:personal_ai/config/firebase_options.dart';
+import 'package:lumios/config/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

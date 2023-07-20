@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:personal_ai/providers/chat_messages_provider.dart';
-import 'package:personal_ai/providers/chat_user_provider.dart';
+import 'package:lumios/providers/chat_messages_provider.dart';
+import 'package:lumios/providers/chat_user_provider.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class ChatScreen extends ConsumerWidget {

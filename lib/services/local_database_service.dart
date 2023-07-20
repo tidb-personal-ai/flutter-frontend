@@ -1,5 +1,5 @@
 import 'package:idb_sqflite/idb_sqflite.dart';
-import 'package:personal_ai/models/chat_message.dart';
+import 'package:lumios/models/chat_message.dart';
 
 class LocalDatabaseService {
   final Database _database;

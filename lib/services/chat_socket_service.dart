@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:personal_ai/models/chat_message.dart';
+import 'package:lumios/models/chat_message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class StreamSocket{

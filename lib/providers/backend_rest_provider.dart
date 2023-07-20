@@ -1,6 +1,6 @@
 
-import 'package:personal_ai/config/config.dart';
-import 'package:personal_ai/services/backend_rest_service.dart';
+import 'package:lumios/config/config.dart';
+import 'package:lumios/services/backend_rest_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'backend_rest_provider.g.dart';
