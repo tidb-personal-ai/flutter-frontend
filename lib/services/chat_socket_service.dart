@@ -24,7 +24,10 @@ class ChatSocketService {
   Stream<ChatMessage> get stream => _streamSocket.getResponse;
 
   ChatSocketService(this._socket) {
-    _socket.onDisconnect((_) => _streamSocket.dispose());
+    _socket.onDisconnect((_) => print('Websocket disconnected'));
+    _socket.onConnect((_) => print('Websocket connected'));
+    _socket.onReconnect((_) => print('Websocket reconnected'));
+    _socket.onReconnectFailed((_) => print('Websocket reconnection failed'));
     _socket.on('chat', (data) => onMessage(data as Map<String, dynamic>));
     _socket.on('error', (message) => Fluttertoast.showToast(
           msg: message['message'] as String,
@@ -53,5 +56,13 @@ class ChatSocketService {
     print('Message received');
     final chatMessage = ChatMessage.fromApi(data, sender: ChatMessageSender.ai);
     _streamSocket.addResponse(chatMessage);
+  }
+
+  void close() {
+    try {
+      _socket.close();
+    } finally {
+      _streamSocket.dispose();
+    }
   }
 }

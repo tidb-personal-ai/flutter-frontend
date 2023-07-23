@@ -23,6 +23,7 @@ Future<ChatSocketService?> chatSocketService(ChatSocketServiceRef ref) async {
         .setTransports(['websocket'])
         .setAuth({'Authorization': 'Bearer $idToken'})
         .enableForceNewConnection()
+        .enableReconnection()
         .build(),
   );
 

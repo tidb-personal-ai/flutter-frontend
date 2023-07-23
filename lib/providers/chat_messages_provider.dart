@@ -47,9 +47,9 @@ class ChatMessages extends _$ChatMessages {
     return messages;
   }
 
-  void sendMessage(String message) {
+  Future<void> sendMessage(String message) async {
     final messageSender = ref.read(modelMessagesProvider.notifier);
-    messageSender.sendMessage(ChatMessage(
+    await messageSender.sendMessage(ChatMessage(
         id: 0, 
         message: message, 
         timestamp: DateTime.now(), 
