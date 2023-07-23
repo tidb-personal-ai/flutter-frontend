@@ -26,8 +26,9 @@ Future<ChatSocketService?> chatSocketService(ChatSocketServiceRef ref) async {
         .enableReconnection()
         .build(),
   );
+  final service = ChatSocketService(socket);
 
-  ref.onDispose(() => socket.close());
+  ref.onDispose(() => service.close());
   print('Socket opened');
-  return ChatSocketService(socket);
+  return service;
 }
