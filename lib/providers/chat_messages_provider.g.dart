@@ -34,7 +34,7 @@ final isLoadingProvider = AutoDisposeProvider<bool>.internal(
 );
 
 typedef IsLoadingRef = AutoDisposeProviderRef<bool>;
-String _$chatMessagesHash() => r'15862bbe129195bc408b447f7a200819e4a938d3';
+String _$chatMessagesHash() => r'44d153082affa41e66ee9a01dfebd58a36545bed';
 
 /// See also [ChatMessages].
 @ProviderFor(ChatMessages)

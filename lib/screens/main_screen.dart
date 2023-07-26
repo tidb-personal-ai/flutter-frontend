@@ -4,6 +4,8 @@ import 'package:lumios/providers/ai_provider.dart';
 import 'package:lumios/screens/chat_screen.dart';
 import 'package:lumios/screens/profile_screen.dart';
 
+import 'audio_screen.dart';
+
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.ai});
   
@@ -49,6 +51,24 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
           ),
         ],
       ),
+      floatingActionButton: _tabController!.index == 0 
+        ? Padding(
+            padding: const EdgeInsets.only(bottom:72.0),
+            child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                        return const AudioScreen();
+                      },
+                    ),
+                  );
+                },
+                shape: const StadiumBorder(),
+                backgroundColor: Theme.of(context).primaryColorDark,
+                child: Icon(Icons.mic, color: Theme.of(context).primaryColorLight,),
+              ),
+          ) 
+        : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       bottomNavigationBar: MotionTabBar(
         initialSelectedTab: 'Chat', 
         labels: const ['Chat', 'Profile'],
