@@ -5,12 +5,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lumios/models/chat_message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
-class StreamSocket{
-  final _socketResponse= StreamController<ChatMessage>();
+class StreamSocket<T>{
+  final _socketResponse= StreamController<T>();
 
-  void Function(ChatMessage) get addResponse => _socketResponse.sink.add;
+  void Function(T) get addResponse => _socketResponse.sink.add;
 
-  Stream<ChatMessage> get getResponse => _socketResponse.stream;
+  Stream<T> get getResponse => _socketResponse.stream;
 
   void dispose(){
     _socketResponse.close();
@@ -19,9 +19,11 @@ class StreamSocket{
 
 class ChatSocketService {
   final io.Socket _socket;
-  final StreamSocket _streamSocket = StreamSocket();
+  final StreamSocket<ChatMessage> _streamSocket = StreamSocket();
+  final StreamSocket<String> _audioStreamSocket = StreamSocket();
 
   Stream<ChatMessage> get stream => _streamSocket.getResponse;
+  Stream<String> get audioStream => _audioStreamSocket.getResponse;
 
   ChatSocketService(this._socket) {
     _socket.onDisconnect((_) => print('Websocket disconnected'));
@@ -29,6 +31,7 @@ class ChatSocketService {
     _socket.onReconnect((_) => print('Websocket reconnected'));
     _socket.onReconnectFailed((_) => print('Websocket reconnection failed'));
     _socket.on('chat', (data) => onMessage(data as Map<String, dynamic>));
+    _socket.on('speech', (data) => onAudioMessage(data as String));
     _socket.on('error', (message) => Fluttertoast.showToast(
           msg: message['message'] as String,
           toastLength: Toast.LENGTH_LONG,
@@ -51,6 +54,17 @@ class ChatSocketService {
 
     return future.future;
   }
+
+  Future<void> sendAudio(String base64Message) {
+    final future = Completer<void>();
+    _socket.emitWithAck('speech', base64Message, ack: (_) {
+        print('audio ack received');
+        future.complete();
+      },
+    );
+
+    return future.future;
+  }
   
   void onMessage(Map<String, dynamic> data) {
     print('Message received');
@@ -58,11 +72,17 @@ class ChatSocketService {
     _streamSocket.addResponse(chatMessage);
   }
 
+  void onAudioMessage(String data) {
+    print('Audio message received');
+    _audioStreamSocket.addResponse(data);
+  }
+
   void close() {
     try {
       _socket.close();
     } finally {
       _streamSocket.dispose();
+      _audioStreamSocket.dispose();
     }
   }
 }

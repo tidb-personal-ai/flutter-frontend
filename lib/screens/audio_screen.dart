@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:lumios/providers/audio_provider.dart';
+import 'package:lumios/providers/audio_state_provider.dart';
 import 'package:lumios/widgets/hold_button.dart';
+import 'package:uuid/uuid.dart';
 
 class AudioScreen extends ConsumerStatefulWidget {
   const AudioScreen({super.key});
@@ -14,8 +16,30 @@ class AudioScreen extends ConsumerStatefulWidget {
 
 class _AudioScreenState extends ConsumerState<AudioScreen> {
   bool _isPlaying = false;
+  String recorderKey = '';
+  AudioMessage? latestMessage;
 
-@override
+  @override
+  void initState() {
+    super.initState();
+    ref.listen(audioMessageStateProvider, (previous, next) async { 
+      latestMessage = next;
+      if (latestMessage != null) {
+        final audio = await ref.read(audioControllerProvider.future);
+        setState(() {
+          _isPlaying = true;
+        });
+        audio.player.startPlayer(
+          fromDataBuffer: latestMessage!.data,
+          whenFinished: () => setState(() {
+            _isPlaying = false;
+          }),
+        );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final audio = ref.watch(audioControllerProvider);
     const backgroundColor = Color.fromARGB(255, 20, 20, 20);
@@ -54,16 +78,17 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
         data: (audio) => Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          verticalDirection: VerticalDirection.down,
           children: [
             FloatingActionButton(
               onPressed: () {
+                if(latestMessage == null) {
+                  return;
+                }
                 setState(() {
                   _isPlaying = true;
                 });
                 audio.player.startPlayer(
-                  fromURI: 'tempAudio.webm',
+                  fromDataBuffer: latestMessage!.data,
                   whenFinished: () => setState(() {
                     _isPlaying = false;
                   }),
@@ -75,8 +100,14 @@ class _AudioScreenState extends ConsumerState<AudioScreen> {
             ),
             const SizedBox(width: 24,),
             HoldButton(
-              onStarted: () => audio.recorder.startRecorder(codec: Codec.opusWebM, toFile: 'tempAudio.webm'), 
-              onStopped: () => audio.recorder.stopRecorder(), 
+              onStarted: () {
+                recorderKey = '${const Uuid().v4()}.webm';
+                audio.recorder.startRecorder(codec: Codec.opusWebM, toFile: recorderKey);
+              }, 
+              onStopped: () async {
+                await audio.recorder.stopRecorder();
+                ref.read(audioMessageStateProvider.notifier).sendMessage(recorderKey);
+              }, 
               icon: Icons.mic
             ),
           ],

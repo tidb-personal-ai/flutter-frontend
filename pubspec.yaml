@@ -58,6 +58,7 @@ dependencies:
   animated_music_indicator: ^0.0.6
   flutter_sound: ^9.2.13
   logger: ^1.4.0
+  uuid: ^3.0.7
 
 dev_dependencies:
   flutter_test:
