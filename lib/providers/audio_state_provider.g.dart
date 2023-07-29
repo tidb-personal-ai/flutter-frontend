@@ -6,7 +6,23 @@ part of 'audio_state_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$audioMessageStateHash() => r'b7298da18f537c859226d6141af6d0340a94da66';
+String _$audioMessageAvailableHash() =>
+    r'2d4d3c4c0820cae220391f257b97e5125dc7b2f7';
+
+/// See also [audioMessageAvailable].
+@ProviderFor(audioMessageAvailable)
+final audioMessageAvailableProvider = AutoDisposeProvider<bool>.internal(
+  audioMessageAvailable,
+  name: r'audioMessageAvailableProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$audioMessageAvailableHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AudioMessageAvailableRef = AutoDisposeProviderRef<bool>;
+String _$audioMessageStateHash() => r'0b7cde2ae6c86ce520885ac3b868a25a7ef4f63a';
 
 /// See also [AudioMessageState].
 @ProviderFor(AudioMessageState)

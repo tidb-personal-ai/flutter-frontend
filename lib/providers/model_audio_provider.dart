@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:lumios/models/audio_message.dart';
 import 'package:lumios/services/chat_socket_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -11,7 +12,7 @@ part 'model_audio_provider.g.dart';
 @Riverpod(keepAlive: true)
 class ModelAudioMessages extends _$ModelAudioMessages {
   ChatSocketService? _socketService;
-  String? latestAudioMessage;
+  AudioMessage? _latestAudioMessage;
   
   Future<void> _startMessageSocketClient(AsyncValue<ChatSocketService?> value) async {
     final completer = Completer<ChatSocketService?>();    
@@ -28,19 +29,21 @@ class ModelAudioMessages extends _$ModelAudioMessages {
     }
     print('Audio socket stream opened');
     await for (final base64Message in socketService.audioStream) {
-      print('Received message from audio socket.');
-      latestAudioMessage = base64Message;
-      ref.invalidateSelf();
+      if(base64Message.id > (_latestAudioMessage?.id ?? 0)){
+        print('Received newest audio message from socket.');
+        _latestAudioMessage = base64Message;
+        ref.invalidateSelf();
+      }
     }
     print('BROKE AUDIO INFINITE LOOP!!!!!');
   }
   
   @override
-  String? build() {
+  AudioMessage? build() {
     _startMessageSocketClient(ref.watch(chatSocketServiceProvider));
 
     print('Building audio messages models.');
-    return latestAudioMessage;
+    return _latestAudioMessage;
   }  
 
   Future<void> sendMessage(String base64Message) async {

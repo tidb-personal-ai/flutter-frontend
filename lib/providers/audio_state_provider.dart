@@ -15,9 +15,15 @@ part 'audio_state_provider.freezed.dart';
 class AudioMessage with _$AudioMessage {
   factory AudioMessage({
     required Uint8List data,
+    required String mimeType,
   }) = _AudioMessage;
 
-  factory AudioMessage.fromBase64(String base64Data) => AudioMessage(data: base64Decode(base64Data));
+  factory AudioMessage.fromBase64(String base64Data, String mimeType) => AudioMessage(data: base64Decode(base64Data), mimeType: mimeType);
+}
+
+@riverpod
+bool audioMessageAvailable(AudioMessageAvailableRef ref) {
+  return ref.watch(audioMessageStateProvider.select((value) => value != null));
 }
 
 @riverpod
@@ -25,7 +31,7 @@ class AudioMessageState extends _$AudioMessageState {
   @override
   AudioMessage? build() {
     final message = ref.watch(modelAudioMessagesProvider);
-    return message == null ? null : AudioMessage.fromBase64(message);
+    return message == null ? null : AudioMessage.fromBase64(message.data, message.mime);
   }
 
   Future<void> sendMessage(String messageKey) async {

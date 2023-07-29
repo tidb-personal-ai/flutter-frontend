@@ -17,6 +17,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$AudioMessage {
   Uint8List get data => throw _privateConstructorUsedError;
+  String get mimeType => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AudioMessageCopyWith<AudioMessage> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $AudioMessageCopyWith<$Res> {
           AudioMessage value, $Res Function(AudioMessage) then) =
       _$AudioMessageCopyWithImpl<$Res, AudioMessage>;
   @useResult
-  $Res call({Uint8List data});
+  $Res call({Uint8List data, String mimeType});
 }
 
 /// @nodoc
@@ -46,12 +47,17 @@ class _$AudioMessageCopyWithImpl<$Res, $Val extends AudioMessage>
   @override
   $Res call({
     Object? data = null,
+    Object? mimeType = null,
   }) {
     return _then(_value.copyWith(
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as Uint8List,
+      mimeType: null == mimeType
+          ? _value.mimeType
+          : mimeType // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -64,7 +70,7 @@ abstract class _$$_AudioMessageCopyWith<$Res>
       __$$_AudioMessageCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Uint8List data});
+  $Res call({Uint8List data, String mimeType});
 }
 
 /// @nodoc
@@ -79,12 +85,17 @@ class __$$_AudioMessageCopyWithImpl<$Res>
   @override
   $Res call({
     Object? data = null,
+    Object? mimeType = null,
   }) {
     return _then(_$_AudioMessage(
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as Uint8List,
+      mimeType: null == mimeType
+          ? _value.mimeType
+          : mimeType // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -92,14 +103,16 @@ class __$$_AudioMessageCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_AudioMessage with DiagnosticableTreeMixin implements _AudioMessage {
-  _$_AudioMessage({required this.data});
+  _$_AudioMessage({required this.data, required this.mimeType});
 
   @override
   final Uint8List data;
+  @override
+  final String mimeType;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AudioMessage(data: $data)';
+    return 'AudioMessage(data: $data, mimeType: $mimeType)';
   }
 
   @override
@@ -107,7 +120,8 @@ class _$_AudioMessage with DiagnosticableTreeMixin implements _AudioMessage {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'AudioMessage'))
-      ..add(DiagnosticsProperty('data', data));
+      ..add(DiagnosticsProperty('data', data))
+      ..add(DiagnosticsProperty('mimeType', mimeType));
   }
 
   @override
@@ -115,12 +129,14 @@ class _$_AudioMessage with DiagnosticableTreeMixin implements _AudioMessage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_AudioMessage &&
-            const DeepCollectionEquality().equals(other.data, data));
+            const DeepCollectionEquality().equals(other.data, data) &&
+            (identical(other.mimeType, mimeType) ||
+                other.mimeType == mimeType));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(data));
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(data), mimeType);
 
   @JsonKey(ignore: true)
   @override
@@ -130,10 +146,14 @@ class _$_AudioMessage with DiagnosticableTreeMixin implements _AudioMessage {
 }
 
 abstract class _AudioMessage implements AudioMessage {
-  factory _AudioMessage({required final Uint8List data}) = _$_AudioMessage;
+  factory _AudioMessage(
+      {required final Uint8List data,
+      required final String mimeType}) = _$_AudioMessage;
 
   @override
   Uint8List get data;
+  @override
+  String get mimeType;
   @override
   @JsonKey(ignore: true)
   _$$_AudioMessageCopyWith<_$_AudioMessage> get copyWith =>

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:lumios/models/audio_message.dart';
 import 'package:lumios/models/chat_message.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -20,10 +21,10 @@ class StreamSocket<T>{
 class ChatSocketService {
   final io.Socket _socket;
   final StreamSocket<ChatMessage> _streamSocket = StreamSocket();
-  final StreamSocket<String> _audioStreamSocket = StreamSocket();
+  final StreamSocket<AudioMessage> _audioStreamSocket = StreamSocket();
 
   Stream<ChatMessage> get stream => _streamSocket.getResponse;
-  Stream<String> get audioStream => _audioStreamSocket.getResponse;
+  Stream<AudioMessage> get audioStream => _audioStreamSocket.getResponse;
 
   ChatSocketService(this._socket) {
     _socket.onDisconnect((_) => print('Websocket disconnected'));
@@ -31,7 +32,7 @@ class ChatSocketService {
     _socket.onReconnect((_) => print('Websocket reconnected'));
     _socket.onReconnectFailed((_) => print('Websocket reconnection failed'));
     _socket.on('chat', (data) => onMessage(data as Map<String, dynamic>));
-    _socket.on('speech', (data) => onAudioMessage(data as String));
+    _socket.on('speech', (data) => onAudioMessage(data as Map<String, dynamic>));
     _socket.on('error', (message) => Fluttertoast.showToast(
           msg: message['message'] as String,
           toastLength: Toast.LENGTH_LONG,
@@ -72,9 +73,9 @@ class ChatSocketService {
     _streamSocket.addResponse(chatMessage);
   }
 
-  void onAudioMessage(String data) {
+  void onAudioMessage(Map<String, dynamic> data) {
     print('Audio message received');
-    _audioStreamSocket.addResponse(data);
+    _audioStreamSocket.addResponse(AudioMessage.fromApi(data));
   }
 
   void close() {

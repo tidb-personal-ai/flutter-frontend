@@ -1,18 +1,43 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sound/flutter_sound.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:logger/logger.dart' show Level;
+import 'package:uuid/uuid.dart';
 
 part 'audio_provider.g.dart';
-part 'audio_provider.freezed.dart';
 
-@freezed
-class AudioController with _$AudioController {
-  factory AudioController({
-    required FlutterSoundRecorder recorder,
-    required FlutterSoundPlayer player,
-  }) = _AudioController;
+class AudioController {
+  final FlutterSoundRecorder _recorder;
+  final FlutterSoundPlayer _player;
+  String _recorderKey = '';
+
+  AudioController(this._recorder, this._player);
+
+  Future<void> startRecorder() async {
+    _recorderKey = '${const Uuid().v4()}.webm';
+    await _recorder.startRecorder(codec: Codec.opusWebM, toFile: _recorderKey);
+  }
+
+  Future<String> stopRecorder() async {
+    await _recorder.stopRecorder();
+    return _recorderKey;
+  }
+
+  Future<void> startPlayer({
+    required Uint8List fromDataBuffer,
+    required Codec codec,
+    required void Function() whenFinished,
+  }) async {
+    await _player.startPlayer(
+      fromDataBuffer: fromDataBuffer,
+      whenFinished: whenFinished,
+      codec: codec,
+    );
+  }
+
+  Future<void> stopPlayer() async {
+    await _player.stopPlayer();
+  }
 }
 
 @riverpod
@@ -21,7 +46,7 @@ FutureOr<AudioController> audioController(AudioControllerRef ref) async {
   final player = await ref.watch(audioPlayerProvider.future);
   await recorder.startRecorder(codec: Codec.opusWebM, toFile: 'foo.webm');
   await recorder.stopRecorder();
-  return AudioController(recorder: recorder, player: player);
+  return AudioController(recorder, player);
 }
 
 @riverpod

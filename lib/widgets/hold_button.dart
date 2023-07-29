@@ -10,15 +10,23 @@ class HoldButton extends StatefulWidget {
   /// Initial delay before on started is called
   final int initialDelay;
 
-  /// Icon on the button
-  final IconData icon;
+  /// True if the button is enabled
+  final bool enabled;
+
+  /// The child widget
+  final Widget child;
+
+  /// The background color of the button
+  final Color backgroundColor;
 
   const HoldButton(
       {Key? key,
       required this.onStarted,
       required this.onStopped,
       this.initialDelay = 300,
-      required this.icon})
+      this.enabled = true,
+      required this.child,
+      required this.backgroundColor})
       : super(key: key);
 
   @override
@@ -33,19 +41,18 @@ class HoldButtonState extends State<HoldButton> {
   Widget build(BuildContext context) {
     const shape = StadiumBorder();
     return Material(
-      color: Theme.of(context).dividerColor,
+      color: widget.backgroundColor,
       shape: shape,
-      child: InkWell(
-        onTap: () => _stopHolding(),
-        onTapDown: (_) => _startHolding(),
-        onTapCancel: () => _stopHolding(),
-        customBorder: shape,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(
-            widget.icon,
-            color: Theme.of(context).textTheme.displayLarge?.color ?? Colors.white70,
-            size: 36,
+      child: IgnorePointer(
+        ignoring: !widget.enabled,
+        child: InkWell(
+          onTap: () => _stopHolding(),
+          onTapDown: (_) => _startHolding(),
+          onTapCancel: () => _stopHolding(),
+          customBorder: shape,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: widget.child,
           ),
         ),
       ),
