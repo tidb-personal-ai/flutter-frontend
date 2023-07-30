@@ -23,7 +23,7 @@ class Config {
       return kDebugAndroidConfig;
     }
     
-    return kReleaseConfig;
+    return kDebugConfig;
   }
   
   static const Config kReleaseConfig = Config(

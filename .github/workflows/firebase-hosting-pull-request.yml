@@ -19,7 +19,7 @@ jobs:
         run: |
           flutter clean
           flutter pub get
-          flutter build web --profile \
+          flutter build web --release \
             --dart-define FIREBASE_WEB_API_KEY=${{ secrets.FIREBASE_WEB_API_KEY }} \
             --dart-define FIREBASE_WEB_APP_ID=${{ secrets.FIREBASE_WEB_APP_ID }} \
             --dart-define FIREBASE_ANDROID_API_KEY=${{ secrets.FIREBASE_ANDROID_API_KEY }} \

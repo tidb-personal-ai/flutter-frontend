@@ -47,12 +47,8 @@ class ModelAudioMessages extends _$ModelAudioMessages {
   }  
 
   Future<void> sendMessage(String base64Message) async {
-    final socketService = await ref.read(chatSocketServiceProvider.future);
-    if (socketService == null) {
-      print('Socket service is null.');
-      return;
-    }
     print('Sending message to socket.');
-    await socketService.sendAudio(base64Message);
+    final socketService = await ref.read(chatSocketServiceProvider.future);
+    await socketService!.sendAudio(base64Message);
   }
 }
