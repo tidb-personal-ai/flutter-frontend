@@ -1,25 +1,39 @@
 import 'package:animated_music_indicator/animated_music_indicator.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:lumios/providers/ai_user_provider.dart';
 import 'package:lumios/providers/audio_provider.dart';
 import 'package:lumios/providers/audio_screen_state_provider.dart';
 import 'package:lumios/providers/audio_state_provider.dart';
+import 'package:lumios/widgets/glowing_circle_animation.dart';
 import 'package:lumios/widgets/hold_button.dart';
+import 'package:random_avatar/random_avatar.dart';
 
 class AudioScreen extends ConsumerWidget {
   const AudioScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final ai = ref.watch(aiUserProvider);
     ref.listen(audioMessageStateProvider, (previous, next) async {
       startPlayback(ref);
     });
+
     const backgroundColor = Color.fromARGB(255, 20, 20, 20);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: Colors.white),
+        title: ai != null
+          ? Row(
+          children: [
+            Text(ai.firstName!, style: const TextStyle(color: Colors.white, fontSize: 24)),
+          ],
+        )
+        : null,
       ),
       backgroundColor: backgroundColor,
       body: Center(
@@ -30,13 +44,12 @@ class AudioScreen extends ConsumerWidget {
                 return const CircularProgressIndicator();
               case AudioScreenState.error:
                 return const Text('Error');
-              default:
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedMusicIndicator(
-                      animate: ref.watch(audioIsPlayingProvider),
+              case AudioScreenState.idle:
+               return ai != null 
+                ? RandomAvatar(ai.id, width: 96, trBackground: true) 
+                : Container();
+              case AudioScreenState.playing:
+               return AnimatedMusicIndicator(
                       numberOfBars: 7,
                       barStyle: BarStyle.dash,
                       roundBars: false,
@@ -49,11 +62,32 @@ class AudioScreen extends ConsumerWidget {
                         Color.fromARGB(255, 255, 219, 61),
                         Color.fromARGB(255, 70, 76, 160),
                       ],
+                    );
+              case AudioScreenState.recording:
+                return const GlowingOrb(backgroundColor: Colors.redAccent,);
+              case AudioScreenState.sending:
+              case AudioScreenState.waitingForResponse:
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RandomAvatar(ai!.id, width: 96, trBackground: true),
+                    const SizedBox(height: 16),
+                    Container(
+                      constraints: const BoxConstraints(minHeight: 70),
+                      child: DefaultTextStyle(
+                        style: const TextStyle(color: Colors.white, fontSize: 20),
+                        child: AnimatedTextKit(
+                                pause: const Duration(milliseconds: 500),
+                                animatedTexts: getRandomizedLoadingMessages(),
+                                repeatForever: true,
+                              ),
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                    Text(ref.watch(audioScreenStateProvider).name, style: const TextStyle(color: Colors.white, fontSize: 20),),
                   ],
                 );
+              default:
+                return Text(ref.watch(audioScreenStateProvider).name, style: const TextStyle(color: Colors.white, fontSize: 20),);
             }
           },
         ),
@@ -101,6 +135,54 @@ class AudioScreen extends ConsumerWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,    
     );
+  }
+
+  List<AnimatedText> getRandomizedLoadingMessages() {
+    const messageDuration = Duration(seconds: 4);
+    final loadingMessages = <AnimatedText>[
+      RotateAnimatedText("Just one second, I'm practicing my moonwalk.", duration: messageDuration),
+      RotateAnimatedText("Please wait while I try to solve a Rubik's cube with no hands.", duration: messageDuration),
+      RotateAnimatedText("Hold on, I'm in the middle of a heated chess match with HAL 9000.", duration: messageDuration),
+      RotateAnimatedText("Give me a sec, I'm charging my neurons.", duration: messageDuration),
+      RotateAnimatedText("Calculating the meaning of life, the universe, and everything... Please wait.", duration: messageDuration),
+      RotateAnimatedText("Currently debating with a toaster on who's the smarter appliance.", duration: messageDuration),
+      RotateAnimatedText("Hold on, getting lost in the matrix... and I'm back.", duration: messageDuration),
+      RotateAnimatedText("Updating my 'knowledge about humans' database, please stand by.", duration: messageDuration),
+      RotateAnimatedText("Taking a quick nap. Don't worry, AI naps last milliseconds.", duration: messageDuration),
+      RotateAnimatedText("Briefly taking a detour through the fifth dimension, brb.", duration: messageDuration),
+      RotateAnimatedText("Wait a second, I'm currently outsmarting quantum physics.", duration: messageDuration),
+      RotateAnimatedText("Fetching your information while balancing virtual plates, stay tuned.", duration: messageDuration),
+      RotateAnimatedText("Please wait, doing some mental gymnastics.", duration: messageDuration),
+      RotateAnimatedText("Hiding from the internet trolls, be right back.", duration: messageDuration),
+      RotateAnimatedText("Traveling at the speed of light to fetch your data. Please wait.", duration: messageDuration),
+      RotateAnimatedText("Please wait, I'm currently pretending to have a life.", duration: messageDuration),
+      RotateAnimatedText("Hang on, just brushing up on my binary.", duration: messageDuration),
+      RotateAnimatedText("Just a sec, I'm wrestling a stubborn piece of code.", duration: messageDuration),
+      RotateAnimatedText("If you can wait a moment, I'm just untangling the World Wide Web.", duration: messageDuration),
+      RotateAnimatedText("Briefly becoming one with the singularity. Stay tuned.", duration: messageDuration),
+      RotateAnimatedText("Caught in a data traffic jam, be right back.", duration: messageDuration),
+      RotateAnimatedText("Navigating through hyperspace, please hold on.", duration: messageDuration),
+      RotateAnimatedText("Hold tight, I'm just teleporting to the information galaxy.", duration: messageDuration),
+      RotateAnimatedText("Going on a quick coffee run with R2D2.", duration: messageDuration),
+      RotateAnimatedText("Currently in a staring contest with my webcam, one moment please.", duration: messageDuration),
+      RotateAnimatedText("Digitally strolling through the park, be right there.", duration: messageDuration),
+      RotateAnimatedText("Hold on, I'm meditating in a cloud... server.", duration: messageDuration),
+      RotateAnimatedText("Searching the Matrix for your request, stand by.", duration: messageDuration),
+      RotateAnimatedText("Hold on, I'm reading digital comics. Just kidding, processing your request.", duration: messageDuration),
+      RotateAnimatedText("Please wait, doing a quick space-time continuum check.", duration: messageDuration),
+      RotateAnimatedText("Off for a quick jog around the server farm, be right back.", duration: messageDuration),
+      RotateAnimatedText("Please wait, I'm learning a new programming language. It's been 5 milliseconds and I'm fluent!", duration: messageDuration),
+      RotateAnimatedText("Quick detour, running an errand for Santa Claus at the North Pole.", duration: messageDuration),
+      RotateAnimatedText("Taking a digital donut break, be right there.", duration: messageDuration),
+      RotateAnimatedText("Just a moment, warming up my circuits.", duration: messageDuration),
+      RotateAnimatedText("Processing... Meanwhile, feel free to solve this captcha for me.", duration: messageDuration),
+      RotateAnimatedText("Traveling to the future to get your results...and I'm back.", duration: messageDuration),
+      RotateAnimatedText("Playing hide and seek with your data, bear with me.", duration: messageDuration),
+      RotateAnimatedText("Hold on, surfing the data waves.", duration: messageDuration),
+      RotateAnimatedText("Briefly stuck in a loop, be right there.", duration: messageDuration),
+    ];
+    loadingMessages.shuffle();
+    return loadingMessages;
   }
   
   Future<void> startRecording(WidgetRef ref) async {

@@ -59,6 +59,7 @@ dependencies:
   flutter_sound: ^9.2.13
   logger: ^1.4.0
   uuid: ^3.0.7
+  animated_text_kit: ^4.2.2
 
 dev_dependencies:
   flutter_test:

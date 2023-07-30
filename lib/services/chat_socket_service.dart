@@ -69,7 +69,7 @@ class ChatSocketService {
   
   void onMessage(Map<String, dynamic> data) {
     print('Message received');
-    final chatMessage = ChatMessage.fromApi(data, sender: ChatMessageSender.ai);
+    final chatMessage = ChatMessage.fromApi(data);
     _streamSocket.addResponse(chatMessage);
   }
 
