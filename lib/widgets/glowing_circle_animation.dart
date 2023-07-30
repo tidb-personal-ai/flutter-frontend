@@ -27,6 +27,12 @@ class _GlowingOrbState extends State<GlowingOrb> with SingleTickerProviderStateM
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
             width: 100,
