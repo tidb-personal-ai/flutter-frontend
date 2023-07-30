@@ -58,6 +58,11 @@ class ChatSocketService {
 
   Future<void> sendAudio(String base64Message) {
     final future = Completer<void>();
+    if(_socket == null) {
+      print('socket is null');
+    } else {
+      print('socket is not null');
+    }
     _socket.emitWithAck('speech', base64Message, ack: (_) {
         print('audio ack received');
         future.complete();
