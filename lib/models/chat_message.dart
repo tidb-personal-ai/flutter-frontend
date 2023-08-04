@@ -5,12 +5,14 @@ class ChatMessage {
   final String message;
   final DateTime timestamp;
   final ChatMessageSender sender;
+  final bool isFunctionCall;
 
   ChatMessage({
     required this.id,
     required this.message,
     required this.timestamp,
     required this.sender,
+    this.isFunctionCall = false,
   });
 
   /// This method is used to convert a map to a ChatMessage object
@@ -22,6 +24,7 @@ class ChatMessage {
       sender: map['sender'] == 'user'
           ? ChatMessageSender.user
           : ChatMessageSender.ai,
+      isFunctionCall: map.containsKey('isFunctionCall') && map['isFunctionCall'] as bool,
     );
   }
 
@@ -34,6 +37,7 @@ class ChatMessage {
       sender: sender ?? (map['sender'] == 'user'
           ? ChatMessageSender.user
           : ChatMessageSender.ai),
+      isFunctionCall: map.containsKey('isFunctionCall') && map['isFunctionCall'] as bool,
     );
   }
 
@@ -44,6 +48,7 @@ class ChatMessage {
       'message': message,
       'timestamp': timestamp,
       'sender': sender.name,
+      'isFunctionCall': isFunctionCall,
     };
   }
 

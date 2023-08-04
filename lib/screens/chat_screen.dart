@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart';
+import 'package:flutter_chat_types/src/message.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,6 +13,8 @@ class ChatScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final chatUser = ref.watch(chatUserProvider)!;
+    const theme = DefaultChatTheme();
     return ref.watch(isLoadingProvider) 
       ? const Center(child: CircularProgressIndicator())
       : Chat(
@@ -18,11 +22,20 @@ class ChatScreen extends ConsumerWidget {
         onSendPressed: (p0) {
           ref.read(chatMessagesProvider.notifier).sendMessage(p0.text).catchError(onSendError);
         },
-        user: ref.watch(chatUserProvider)!,
+        user: chatUser,
         avatarBuilder: (userId) => RandomAvatar(userId, width: 48),
         showUserAvatars: true,
         showUserNames: true,
         typingIndicatorOptions: TypingIndicatorOptions(typingUsers: ref.watch(typingUsersProvider)),
+        bubbleBuilder: (child, {required message, required nextMessageInGroup}) => bubbleBuilder(
+          child, 
+          message: message,
+          nextMessageInGroup: 
+          nextMessageInGroup, 
+          authorIsUser: message.author.id == chatUser.id,
+          theme: theme,
+        ),
+        theme: theme,
       );
   }
 
@@ -38,4 +51,49 @@ class ChatScreen extends ConsumerWidget {
       fontSize: 16.0,
     );
   }
+
+  Widget bubbleBuilder(Widget child, {
+    required types.Message message, 
+    required bool nextMessageInGroup, 
+    required bool authorIsUser,
+    required ChatTheme theme,
+  }) {
+    final borderRadius = BorderRadiusDirectional.only(
+      bottomEnd: Radius.circular(
+        !authorIsUser || nextMessageInGroup ? theme.messageBorderRadius : 0,
+      ),
+      bottomStart: Radius.circular(
+        authorIsUser || nextMessageInGroup ? theme.messageBorderRadius : 0,
+      ),
+      topEnd: Radius.circular(theme.messageBorderRadius),
+      topStart: Radius.circular(theme.messageBorderRadius),
+    );
+    final iconColor = getUserAvatarNameColor(message.author, theme.userAvatarNameColors);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if(!authorIsUser && message.metadata?['isFunctionCall'] == true)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Icon(Icons.call_made, size: 24, color: iconColor,),
+          ),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: !authorIsUser ||
+                    message.type == types.MessageType.image
+                ? theme.secondaryColor
+                : theme.primaryColor,
+          ),
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: child,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Color getUserAvatarNameColor(User user, List<Color> colors) =>
+    colors[user.id.hashCode % colors.length];
 }

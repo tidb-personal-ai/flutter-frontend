@@ -40,6 +40,9 @@ class ChatMessages extends _$ChatMessages {
         ? user 
         : ai,
         createdAt: m.timestamp.millisecondsSinceEpoch,
+        metadata: {
+          'isFunctionCall': m.isFunctionCall,
+        }
       ),
     ).toList();
     messages.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
