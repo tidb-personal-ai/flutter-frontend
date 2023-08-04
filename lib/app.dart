@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lumios/providers/auth_provider.dart';
+import 'package:lumios/screens/admin_screen.dart';
 import 'package:lumios/screens/ai_gate_screen.dart';
 import 'package:lumios/screens/auth_screens.dart';
 import 'package:lumios/screens/profile_screen.dart';
@@ -38,6 +39,7 @@ class PersonalAiApp extends ConsumerWidget {
         'profile': (context) => const ProfileScreen(),
         'verify-email': (context) => const VerifyEmailScreen(),
         'forgot-password':(context) => const PasswordResetScreen(),
+        'admin': (context) => const AdminScreen(),
         },
       );
   }

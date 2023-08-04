@@ -3,6 +3,13 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'user_provider.g.dart';
 
+@riverpod
+Future<bool> isAdmin(IsAdminRef ref) async {
+  final user = ref.watch(userProvider);
+  final idToken = await user?.getIdTokenResult();
+  return idToken?.claims?['admin'] == true;
+}
+
 @Riverpod(keepAlive: true)
 User? user(UserRef ref) {
   final auth = FirebaseAuth.instance;
